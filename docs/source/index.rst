@@ -49,3 +49,127 @@ Materials and Methods
 
 以\ `书本第二节(Repository Pattern) <https://www.cosmicpython.com/book/chapter_02_repository.html>`__\ 和\ `书本第四节(Flask API and Service  Layer) <https://www.cosmicpython.com/book/chapter_04_service_layer.html>`__\ 的项目源码为开发基础，结合书本中讲到的仓库模型、域模型以及服务层等知识内容，对本实验的项目进行开发。
 
+Results
+-------
+
+orm.py
+
+.. code:: python
+
+   # Software Architecture and Design Patterns -- Lab 3 starter code
+   # Copyright (C) 2021 Hui Lan
+
+   from sqlalchemy import Table, MetaData, Column, Integer, String, Date, ForeignKey
+   from sqlalchemy.orm import mapper, relationship
+
+   import model
+
+   metadata = MetaData()
+
+   articles = Table(
+       'articles',
+       metadata,
+       Column('article_id', Integer, primary_key=True, autoincrement=True),
+       Column('text', String(10000)),
+       Column('source', String(100)),
+       Column('date', String(10)),
+       Column('level', Integer, nullable=False),
+       Column('question', String(1000)),
+       )
+
+
+   users = Table(
+       'users',
+       metadata,
+       Column('username', String(100), primary_key=True),
+       Column('password', String(64)),
+       Column('start_date', String(10), nullable=False),
+       Column('expiry_date', String(10), nullable=False),
+       )
+
+   newwords = Table(
+       'newwords',
+       metadata,
+       Column('word_id', Integer, primary_key=True, autoincrement=True),
+       Column('username', String(100), ForeignKey('users.username')),
+       Column('word', String(20)),
+       Column('date', String(10)),
+       )
+
+   readings = Table(
+       'readings',
+       metadata,
+       Column('id', Integer, primary_key=True, autoincrement=True),
+       Column('username', String(100), ForeignKey('users.username')),
+       Column('article_id', Integer, ForeignKey('articles.article_id')),
+       )
+
+
+   def start_mappers():
+       articles_mapper = mapper(model.Article, articles)
+       newWords_mapper = mapper(model.NewWord, newwords)
+       # users_mapper
+       mapper(
+           model.User,
+           users,
+           properties={
+               'newwords': relationship(
+                   newWords_mapper),
+               '_read': relationship(
+                   articles_mapper, secondary=readings
+               )
+           }
+       )
+
+services.py
+
+.. code:: python
+
+   # Software Architecture and Design Patterns -- Lab 3 starter code
+   # An implementation of the Service Layer
+   # Copyright (C) 2021 Hui Lan
+
+   import model
+
+   # word and its difficulty level
+   WORD_DIFFICULTY_LEVEL = {'starbucks':5, 'luckin':4, 'secondcup':4, 'costa':3, 'timhortons':3, 'frappuccino':6}
+
+
+   class UnknownUser(Exception):
+       print("用户不存在")
+       pass
+
+
+   class NoArticleMatched(Exception):
+       print("无相关文章")
+       pass
+
+
+   def read(user, user_repo, article_repo, session):
+       # 判断用户是否在库内
+       username = user.username
+       if user_repo.get(username) is None or user_repo.get(username).password != user.password:
+           # 注意!!!! 要用raise,而不是return!!!
+           raise UnknownUser
+
+       user_level = 0  # 用户的英语等级(初始化为0)
+       amount = 0  # 单词数量
+       # all_words 为NewWord中指定用户拥有的所有单词
+       all_words = session.query(model.NewWord).filter_by(username=username).all()
+       for user_word in all_words:
+           user_level += WORD_DIFFICULTY_LEVEL[user_word.word]
+           amount += 1
+       user_level = user_level / amount
+       article = None  # 初始化文章
+       article_level = 0  # 文章的等级(初始化为0)
+       for article0 in article_repo.list():
+           if article0.level > user_level:
+               if article is None or article0.level < article_level:
+                   article_level = article0.level
+                   article = article0
+       # 找不到需要的文章
+       if article is None:
+           raise NoArticleMatched
+       session.query(model.User).filter_by(username=username).one().read_article(article)
+       session.commit()
+       return article.article_id
