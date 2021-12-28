@@ -198,3 +198,12 @@ read方法中包含了判断用户是否合法、判断文章是否在库内和�
 当判断用户是否合法或是判断文章是否在库内的需求改变，则需要对read整个方法进行修改、测试，大大降低了维护的效率。
 
 应当将read中的前两种方法拆分出去，如命名两个validate_user和validate_article类，在类中分别达成对应的需求。
+
+References
+----------
+
+1. `Sofia Peterson, How to Write a Computer Science Lab Report, Copyright©2019 <https://thehackpost.com/a-brief-guide-how-to-write-a-computer-science-lab-report.html#:~:text=A%20Brief%20Guide%20How%20to%20Write%20a%20Computer,Results.%20...%206%20Discussions.%20...%207%20References.%20>`__
+
+2. `字节,Python架构模式, Copyright©2020 <%5BPython架构模式%20-%20知乎%20(zhihu.com)%5D(https://zhuanlan.zhihu.com/p/257281522)>`__
+
+3. `Harry Percival and Bob Gregory. Architecture Patterns with Python. O’Reilly Media; 1st edition (March 31, 2020). <%5BPreface%20(cosmicpython.com)%5D(https://www.cosmicpython.com/book/preface.html)>`__
