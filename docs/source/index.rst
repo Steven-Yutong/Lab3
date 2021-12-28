@@ -13,9 +13,21 @@ Welcome to Lab3's documentation!
 
 
 
-Indices and tables
-==================
+Lab3
+=============================
 
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+小组成员信息： 
+
+201932110143 王炫 
+
+201932110145 邬程峰 
+
+201932110146 吴彬宇
+
+201932110147 吴雨桐 
+
+201932110148 谢铭轩
+
+项目Github地址：\ `Github <https://github.com/Steven-Yutong/PhotoString.git>`__
+
+项目Read the Docs地址：\ `Read the Docs <https://photostring-yutong.readthedocs.io/zh/latest/>`__
