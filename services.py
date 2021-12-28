@@ -46,5 +46,3 @@ def read(user, user_repo, article_repo, session):
     session.query(model.User).filter_by(username=username).one().read_article(article)
     session.commit()
     return article.article_id
-
-

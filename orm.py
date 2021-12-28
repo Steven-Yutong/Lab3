@@ -62,4 +62,3 @@ def start_mappers():
             )
         }
     )
-
