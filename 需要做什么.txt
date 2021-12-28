@@ -1,0 +1,5 @@
+You must complete orm.py and services.py such that running the following command could make all the
+five test cases defined in test_services.py pass: pytest -v -s test_services.py. You must not modify
+anything in test services.py.
+
+完成orm.py 和 services.py的代码实现，确保pytest -v -s test services.py 能够不报错地通过测试。（不要动services.py）
