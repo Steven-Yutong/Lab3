@@ -178,14 +178,14 @@ Discussions
 -----------
 
 修改工作的详细解释
-~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 1. 由于这是测试驱动开发，根据项目测试提供的需求，我需要完成对应的服务以及完善相应的对象映射，才能够让测试通过。
 2. 在orm.py文件的start_mappers()方法中，写了article，newword和usermodel这三个来自model.py的类的映射mapper，使得在调用start_mappers()方法后会以model中的域模型为基础，以orm.py中的所有初始化Table为原型创建对应的数据库表。
 3. 在services.py的read方法中实现了判断用户是否合法、判断文章是否在库内和为用户提供文章进行阅读三个方法。根据测试的要求，让第一和第二个方法以raise对应的Exception为结尾，第三个方法以整个read函数的返回值article.id为结尾。
 
 read方法是否遵循单一职责原则（SRP）？
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 单一职责原则(SRP)：一个类应该有且仅有一个引起它变化的原因，否则类应该被拆分。
 
@@ -193,11 +193,4 @@ read方法并没有遵循单一职责原则。read方法中包含了\ **判断�
 
 应当将read中的前两种方法拆分出去，如命名两个validate_user和validate_article类，在类中分别达成对应的需求。
 
-References
-----------
 
-1. `Sofia Peterson, How to Write a Computer Science Lab Report, Copyright©2019 <https://thehackpost.com/a-brief-guide-how-to-write-a-computer-science-lab-report.html#:~:text=A%20Brief%20Guide%20How%20to%20Write%20a%20Computer,Results.%20...%206%20Discussions.%20...%207%20References.%20>`__
-
-2. `字节,Python架构模式, Copyright©2020 <%5BPython架构模式%20-%20知乎%20(zhihu.com)%5D(https://zhuanlan.zhihu.com/p/257281522)>`__
-
-3. `Harry Percival and Bob Gregory. Architecture Patterns with Python.O’Reilly Media; 1st edition (March 31, 2020). <%5BPreface%20(cosmicpython.com)%5D(https://www.cosmicpython.com/book/preface.html)>`__
